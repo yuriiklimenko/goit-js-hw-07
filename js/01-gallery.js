@@ -1,24 +1,27 @@
 import { galleryItems } from './gallery-items.js';
+
 // Change code below this line
 const gallery = document.querySelector('.gallery');
 
-function createMarkup(galleryItems) {
-  return galleryItems
-    .map(({ preview, original, description }) => {
-      return `
-  <div class="gallery__item">
-     <img
-      class="gallery__image"
-      src="${preview}"
-      data-source="${original}"
-      alt="${description}"
-     />
-</div>`;
-    })
-    .join('');
-}
+const makeMarkup = galleryItems => {
+  return galleryItems.map(({ preview, original, description }) => {
+    const item = document.createElement('div');
+    const link = document.createElement('a');
+    const image = document.createElement('img');
+    link.append(image);
+    item.append(link);
+    item.classList.add('gallery__item');
+    link.classList.add('gallery__link');
+    image.classList.add('gallery__image');
+    link.href = original;
+    image.src = preview;
+    image.setAttribute('data-source', original);
+    image.alt = description;
+    return item;
+  });
+};
 
-gallery.insertAdjacentHTML('beforeend', createMarkup(galleryItems));
+gallery.append(...makeMarkup(galleryItems));
 gallery.addEventListener('click', onClick);
 
 function onClick(e) {
@@ -28,9 +31,11 @@ function onClick(e) {
     return;
   }
 
-  const instance = basicLightbox.create(`
+  const instance = basicLightbox.create(
+    `
       <img src="${e.target.dataset.source}" width="800" height="600">
-  `);
+  `
+  );
 
   instance.show();
 

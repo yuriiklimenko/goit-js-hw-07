@@ -15,6 +15,9 @@ function createMarkup(galleryItems) {
 }
 
 const markup = createMarkup(galleryItems);
+gallery.innerHTML = markup;
 
-console.log(markup);
-gallery.insertAdjacentHTML('beforeend', markup);
+var lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+});
