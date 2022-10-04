@@ -31,17 +31,23 @@ function onClick(e) {
     return;
   }
 
+  const closeOnEsc = e => {
+    if (e.code === 'Escape') {
+      instance.close();
+    }
+  };
+
   const instance = basicLightbox.create(
-    `
-      <img src="${e.target.dataset.source}" width="800" height="600">
-  `
+    `<img src="${e.target.dataset.source}" width="800" height="600">`,
+    {
+      onShow: () => {
+        document.addEventListener('keydown', closeOnEsc);
+      },
+      onClose: () => {
+        document.removeEventListener('keydown', closeOnEsc);
+      },
+    }
   );
 
   instance.show();
-
-  document.addEventListener('keydown', event => {
-    if (event.code === 'Escape') {
-      instance.close();
-    }
-  });
 }
